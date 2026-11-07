@@ -1,0 +1,89 @@
+<!-- Author: Abalfazl Eskandari - aeskandari.ir -->
+<UserControl x:Class="FaultTolerance.Views.Page2View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:FaultTolerance.Views">
+
+    <!-- DataContext = Page2ViewModel -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="340"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Margin="32,28">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="{Binding Title}" Style="{StaticResource PageTitleStyle}"/>
+                <TextBlock Text="{Binding Subtitle}" Style="{StaticResource PageSubtitleStyle}" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <Border Grid.Row="1" Style="{StaticResource CardStyle}" Margin="0,20,0,0">
+                <Viewbox Stretch="Uniform" Margin="20">
+                    <!--
+                        Natural size 690 x 340. Gate pins relative to a gate: inputs (0,20) and (0,60), output (120,40).
+                        Top-left gate    at (190,20)  -> inputs y=40,  y=80,  output (310,60)
+                        Bottom-left gate at (190,240) -> inputs y=260, y=300, output (310,280)
+                        Output gate      at (430,130) -> inputs y=150, y=190, output (550,170)
+                    -->
+                    <Canvas Width="690" Height="340">
+
+                        <!-- x1 -> top gate, first input -->
+                        <Line Style="{StaticResource WireLineStyle}" X1="90" Y1="40" X2="190" Y2="40"/>
+
+                        <!-- x2 -> branches to the top gate (second input) and the bottom gate (first input) -->
+                        <Line Style="{StaticResource WireLineStyle}" X1="90" Y1="160" X2="130" Y2="160"/>
+                        <Line Style="{StaticResource WireLineStyle}" X1="130" Y1="80" X2="130" Y2="260"/>
+                        <Line Style="{StaticResource WireLineStyle}" X1="130" Y1="80" X2="190" Y2="80"/>
+                        <Line Style="{StaticResource WireLineStyle}" X1="130" Y1="260" X2="190" Y2="260"/>
+                        <Ellipse Canvas.Left="125" Canvas.Top="155" Width="10" Height="10"
+                                 Fill="{StaticResource GateStrokeBrush}"/>
+
+                        <!-- x3 -> bottom gate, second input -->
+                        <Line Style="{StaticResource WireLineStyle}" X1="90" Y1="300" X2="190" Y2="300"/>
+
+                        <!-- Left gates -> output gate -->
+                        <Polyline Style="{StaticResource WirePolylineStyle}" Points="310,60 370,60 370,150 430,150"/>
+                        <Polyline Style="{StaticResource WirePolylineStyle}" Points="310,280 370,280 370,190 430,190"/>
+
+                        <!-- Output gate -> circuit output -->
+                        <Line Style="{StaticResource WireLineStyle}" X1="550" Y1="170" X2="600" Y2="170"/>
+
+                        <!-- Clickable gates: a click opens the gate type chooser -->
+                        <views:GateControl Canvas.Left="190" Canvas.Top="20" DataContext="{Binding TopGate}"/>
+                        <views:GateControl Canvas.Left="190" Canvas.Top="240" DataContext="{Binding BottomGate}"/>
+                        <views:GateControl Canvas.Left="430" Canvas.Top="130" DataContext="{Binding OutputGate}"/>
+
+                        <!-- Input badges (values are edited in the settings panel) -->
+                        <ContentControl Canvas.Left="10" Canvas.Top="25"
+                                        Content="{Binding Inputs[0]}"
+                                        ContentTemplate="{StaticResource InputBadgeTemplate}"/>
+                        <ContentControl Canvas.Left="10" Canvas.Top="145"
+                                        Content="{Binding Inputs[1]}"
+                                        ContentTemplate="{StaticResource InputBadgeTemplate}"/>
+                        <ContentControl Canvas.Left="10" Canvas.Top="285"
+                                        Content="{Binding Inputs[2]}"
+                                        ContentTemplate="{StaticResource InputBadgeTemplate}"/>
+
+                        <!-- Output badge -->
+                        <ContentControl Canvas.Left="600" Canvas.Top="155"
+                                        Content="{Binding OutputDisplay}"
+                                        ContentTemplate="{StaticResource OutputBadgeTemplate}"/>
+                    </Canvas>
+                </Viewbox>
+            </Border>
+
+            <StackPanel Grid.Row="2">
+                <Border Margin="0,16,0,0"><views:ResultBanner/></Border>
+                <views:DiagnosticBox DataContext="{Binding Diagnostic}"/>
+            </StackPanel>
+        </Grid>
+
+        <views:SettingsPanel Grid.Column="1"/>
+    </Grid>
+</UserControl>

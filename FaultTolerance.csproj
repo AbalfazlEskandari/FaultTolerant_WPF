@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>FaultTolerance</RootNamespace>
+    <AssemblyName>FaultTolerance</AssemblyName>
+    <Authors>Abalfazl Eskandari</Authors>
+    <Company>aeskandari.ir</Company>
+    <Product>Fault Tolerance</Product>
+  </PropertyGroup>
+
+</Project>
